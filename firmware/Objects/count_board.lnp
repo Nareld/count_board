@@ -1,0 +1,7 @@
+".\Objects\STARTUP.obj",
+".\Objects\main.obj",
+".\Objects\HC595.obj",
+".\Objects\delay.obj",
+".\Objects\display.obj" 
+TO ".\Objects\count_board" 
+PRINT(".\Listings\count_board.m51") RAMSIZE(256) 

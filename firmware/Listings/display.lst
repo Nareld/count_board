@@ -1,0 +1,288 @@
+C51 COMPILER V9.59.0.0   DISPLAY                                                           04/30/2023 17:05:52 PAGE 1   
+
+
+C51 COMPILER V9.59.0.0, COMPILATION OF MODULE DISPLAY
+OBJECT MODULE PLACED IN .\Objects\display.obj
+COMPILER INVOKED BY: D:\keil_MDK_community\keil_core\C51\BIN\C51.EXE display.c OPTIMIZE(8,SPEED) BROWSE DEBUG OBJECTEXTE
+                    -ND PRINT(.\Listings\display.lst) OBJECT(.\Objects\display.obj)
+
+line level    source
+
+   1          #include "display.h"
+   2          
+   3          //动态显示：
+   4          //1.送段码
+   5          //2.送位选
+   6          //3.延时
+   7          //4.消隐
+   8          unsigned char code LEDdata[] = {  //数码管显示字符转换表，0-9加空白、横杠。
+   9              0xC0, 0xF9, 0xA4, 0xB0, 0x99, 0x92, 0x82, 0xF8,
+  10              0x80, 0x90, 0xff, 0xBF};
+  11          unsigned char LEDBuf[] = {11,11,11,11,11,11,11,11}; //数据缓冲区
+  12          unsigned char code place_code[] = {0x01,0x02,0x04,0x08,0x10,0x20,0x40,0x80}; //位选列表。
+  13          
+  14          void display()
+  15          {
+  16   1          static unsigned char i;//分支选择变量
+  17   1          unsigned char temp;//中间变量送段码
+  18   1          switch(i)
+  19   1          {
+  20   2              case 0:
+  21   2                  LED_595_DRIVE(0xff,0x00);//消隐
+  22   2                  temp = LEDdata[LEDBuf[0]];//送段码
+  23   2                  LED_595_DRIVE(temp,place_code[0]);//段码、位选
+  24   2      //            delayms(1);//延时1ms显示
+  25   2                  i++;
+  26   2                  break;
+  27   2              case 1:
+  28   2                  LED_595_DRIVE(0xff,0x00);//消隐
+  29   2                  temp = LEDdata[LEDBuf[1]];//送段码
+  30   2                  LED_595_DRIVE(temp,place_code[1]);
+  31   2      //            delayms(1);
+  32   2                  i++;
+  33   2                  break;
+  34   2               case 2:
+  35   2                  LED_595_DRIVE(0xff,0x00);//消隐
+  36   2                  temp = LEDdata[LEDBuf[2]];//送段码
+  37   2                  LED_595_DRIVE(temp,place_code[2]);
+  38   2      //            delayms(1);
+  39   2                  i++;
+  40   2                  break;
+  41   2               case 3:
+  42   2                  LED_595_DRIVE(0xff,0x00);//消隐
+  43   2                  temp = LEDdata[LEDBuf[3]];//送段码
+  44   2                  LED_595_DRIVE(temp,place_code[3]);
+  45   2      //            delayms(1);
+  46   2                  i++;
+  47   2                  break; 
+  48   2               case 4:
+  49   2                  LED_595_DRIVE(0xff,0x00);//消隐
+  50   2                  temp = LEDdata[LEDBuf[4]];//送段码
+  51   2                  LED_595_DRIVE(temp,place_code[4]);
+  52   2      //           delayms(1);
+  53   2                  i++;
+  54   2                  break; 
+C51 COMPILER V9.59.0.0   DISPLAY                                                           04/30/2023 17:05:52 PAGE 2   
+
+  55   2               case 5:
+  56   2                  LED_595_DRIVE(0xff,0x00);//消隐
+  57   2                  temp = LEDdata[LEDBuf[5]];//送段码
+  58   2                  LED_595_DRIVE(temp,place_code[5]);
+  59   2      //           delayms(1);
+  60   2                  i++;
+  61   2                  break; 
+  62   2               case 6:
+  63   2                  LED_595_DRIVE(0xff,0x00);//消隐
+  64   2                  temp = LEDdata[LEDBuf[6]];//送段码
+  65   2                  LED_595_DRIVE(temp,place_code[6]);
+  66   2      //            delayms(1);
+  67   2                  i++;
+  68   2                  break; 
+  69   2               case 7:
+  70   2                  LED_595_DRIVE(0xff,0x00);//消隐
+  71   2                  temp = LEDdata[LEDBuf[7]];//送段码
+  72   2                  LED_595_DRIVE(temp,place_code[7]);
+  73   2      //            delayms(1);
+  74   2                  i=0;
+  75   2      //         case 8:
+  76   2      //            LED_595_DRIVE(0xff,0x00);//消隐
+  77   2      //            temp = LEDdata[LEDBuf[8]];//送段码
+  78   2      //            LED_595_DRIVE(temp,place_code[8]);
+  79   2      ////            delayms(1);
+  80   2      //            i=0;
+  81   2      //         case 9:
+  82   2      //            LED_595_DRIVE(0xff,0x00);//消隐
+  83   2      //            temp = LEDdata[LEDBuf[9]];//送段码
+  84   2      //            LED_595_DRIVE(temp,place_code[9]);
+  85   2      ////            delayms(1);
+  86   2      //            i=0;
+  87   2      //            break; 
+  88   2               default:break;
+  89   2          }   
+  90   1      }
+  91          
+  92          //结果清零
+  93          void clrALL()
+  94          {
+  95   1          unsigned char i;
+  96   1          for(i=0;i<10;i++)
+  97   1          {
+  98   2              LEDBuf[i] = 0;
+  99   2          }
+ 100   1      }
+ 101          
+ 102          //五组累加操作，用于红外计数
+ 103          void LED1_ADD()
+ 104          {
+ 105   1          unsigned char temp;
+ 106   1          unsigned char num;
+ 107   1          
+ 108   1          if(LEDBuf[0]>=10)
+ 109   1          {
+ 110   2              temp = 0;
+ 111   2          }
+ 112   1          else
+ 113   1          {
+ 114   2              temp = LEDBuf[0];
+ 115   2          }
+ 116   1          num = 10*temp;
+C51 COMPILER V9.59.0.0   DISPLAY                                                           04/30/2023 17:05:52 PAGE 3   
+
+ 117   1          
+ 118   1          if(LEDBuf[1]>=10)
+ 119   1          {
+ 120   2              temp = 0;
+ 121   2          }
+ 122   1          else
+ 123   1          {
+ 124   2              temp = LEDBuf[1];
+ 125   2          }
+ 126   1          num += temp;//得到LED显示十进制数
+ 127   1          
+ 128   1          num++;//数字加一
+ 129   1          
+ 130   1          LEDBuf[0] = num/10;//数字到LED
+ 131   1          LEDBuf[1] = num%10;
+ 132   1      }
+ 133          
+ 134          //void LED2_ADD()
+ 135          //{
+ 136          //    unsigned char temp;
+ 137          //    unsigned char num;
+ 138          //    
+ 139          //    if(LEDBuf[2]>=10)
+ 140          //    {
+ 141          //        temp = 0;
+ 142          //    }
+ 143          //    else
+ 144          //    {
+ 145          //        temp = LEDBuf[2];
+ 146          //    }
+ 147          //    num = 10*temp;
+ 148          //    
+ 149          //    if(LEDBuf[3]>=10)
+ 150          //    {
+ 151          //        temp = 0;
+ 152          //    }
+ 153          //    else
+ 154          //    {
+ 155          //        temp = LEDBuf[3];
+ 156          //    }
+ 157          //    num += temp;//得到LED显示十进制数
+ 158          //    
+ 159          //    num++;//数字加一
+ 160          //    
+ 161          //    LEDBuf[2] = num/10;//数字到LED
+ 162          //    LEDBuf[3] = num%10;
+ 163          //}
+ 164          
+ 165          //void LED3_ADD()
+ 166          //{
+ 167          //    unsigned char temp;
+ 168          //    unsigned char num;
+ 169          //    
+ 170          //    if(LEDBuf[4]>=10)
+ 171          //    {
+ 172          //        temp = 0;
+ 173          //    }
+ 174          //    else
+ 175          //    {
+ 176          //        temp = LEDBuf[4];
+ 177          //    }
+ 178          //    num = 10*temp;
+C51 COMPILER V9.59.0.0   DISPLAY                                                           04/30/2023 17:05:52 PAGE 4   
+
+ 179          //    
+ 180          //    if(LEDBuf[5]>=10)
+ 181          //    {
+ 182          //        temp = 0;
+ 183          //    }
+ 184          //    else
+ 185          //    {
+ 186          //        temp = LEDBuf[5];
+ 187          //    }
+ 188          //    num += temp;//得到LED显示十进制数
+ 189          //    
+ 190          //    num++;//数字加一
+ 191          //    
+ 192          //    LEDBuf[4] = num/10;//数字到LED
+ 193          //    LEDBuf[5] = num%10;
+ 194          //}
+ 195          
+ 196          //void LED4_ADD()
+ 197          //{
+ 198          //    unsigned char temp;
+ 199          //    unsigned char num;
+ 200          //    
+ 201          //    if(LEDBuf[6]>=10)
+ 202          //    {
+ 203          //        temp = 0;
+ 204          //    }
+ 205          //    else
+ 206          //    {
+ 207          //        temp = LEDBuf[6];
+ 208          //    }
+ 209          //    num = 10*temp;
+ 210          //    
+ 211          //    if(LEDBuf[7]>=10)
+ 212          //    {
+ 213          //        temp = 0;
+ 214          //    }
+ 215          //    else
+ 216          //    {
+ 217          //        temp = LEDBuf[7];
+ 218          //    }
+ 219          //    num += temp;//得到LED显示十进制数
+ 220          //    
+ 221          //    num++;//数字加一
+ 222          //    
+ 223          //    LEDBuf[6] = num/10;//数字到LED
+ 224          //    LEDBuf[7] = num%10;
+ 225          //}
+ 226          
+ 227          //void LED5_ADD()
+ 228          //{
+ 229          //    unsigned char temp;
+ 230          //    unsigned char num;
+ 231          //    
+ 232          //    if(LEDBuf[8]>=10)
+ 233          //    {
+ 234          //        temp = 0;
+ 235          //    }
+ 236          //    else
+ 237          //    {
+ 238          //        temp = LEDBuf[8];
+ 239          //    }
+ 240          //    num = 10*temp;
+C51 COMPILER V9.59.0.0   DISPLAY                                                           04/30/2023 17:05:52 PAGE 5   
+
+ 241          //    
+ 242          //    if(LEDBuf[9]>=10)
+ 243          //    {
+ 244          //        temp = 0;
+ 245          //    }
+ 246          //    else
+ 247          //    {
+ 248          //        temp = LEDBuf[9];
+ 249          //    }
+ 250          //    num += temp;//得到LED显示十进制数
+ 251          //    
+ 252          //    num++;//数字加一
+ 253          //    
+ 254          //    LEDBuf[8] = num/10;//数字到LED
+ 255          //    LEDBuf[9] = num%10;
+ 256          //}
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =    302    ----
+   CONSTANT SIZE    =     20    ----
+   XDATA SIZE       =   ----    ----
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =      9       1
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =   ----    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)

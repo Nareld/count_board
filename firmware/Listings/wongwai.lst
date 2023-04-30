@@ -1,0 +1,30 @@
+C51 COMPILER V9.59.0.0   WONGWAI                                                           04/30/2023 12:46:50 PAGE 1   
+
+
+C51 COMPILER V9.59.0.0, COMPILATION OF MODULE WONGWAI
+OBJECT MODULE PLACED IN .\Objects\wongwai.obj
+COMPILER INVOKED BY: D:\keil_MDK_community\keil_core\C51\BIN\C51.EXE wongwai.c OPTIMIZE(8,SPEED) BROWSE DEBUG OBJECTEXTE
+                    -ND PRINT(.\Listings\wongwai.lst) OBJECT(.\Objects\wongwai.obj)
+
+line level    source
+
+   1          #include "hongwai.h"
+   2          
+   3          void hongwai_count()
+   4          {
+   5   1          
+   6   1      }
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =      1    ----
+   CONSTANT SIZE    =   ----    ----
+   XDATA SIZE       =   ----    ----
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =   ----    ----
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =   ----    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)
